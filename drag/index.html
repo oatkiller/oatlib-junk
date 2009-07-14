@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<title></title>
+		<style>
+			body, html {
+				padding: 0;
+				margin: 0;
+			}
+			.pane {
+				width: 200px;
+				height: 150px;
+				border: 1px solid red;
+			}
+			.red {
+				background-color: rgba(250,50,10,.7);
+			}
+			.green {
+				background-color: rgba(50,250,50,.7);
+			}
+			.blue {
+				background-color: rgba(50,50,250,.7);
+			}
+			.draggable {
+				cursor: move;
+				cursor: -moz-hand;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="pane draggable red">nab</div>
+		<div class="pane draggable green">nab</div>
+		<div class="pane draggable blue">nab</div>
+		<script src="drag.debug.js"></script>
+	</body>
+</html>
