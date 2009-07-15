@@ -19,7 +19,7 @@ parse_pixel_value = function (value) {
 	}
 	return false;
 },
-wait = 1E3 / 12,
+wait = 1E3 / 32,
 prepare = function () {
 	// capture mouseup to end this
 	canceler = $$_dom_event_add_listener($$document,$mouseup,function (e,oe) {
