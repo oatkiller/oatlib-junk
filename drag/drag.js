@@ -81,7 +81,7 @@ begin_dragging = function (data) {
 	},wait);
 
 },
-var is_draggable = function (n) {
+is_draggable = function (n) {
 	return $$_dom_has_class_name(n,$draggable);
 };
 
