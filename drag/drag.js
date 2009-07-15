@@ -1,10 +1,14 @@
 //= require <dom/clear_interval>
+//= require <return_false>
+//= require <dom/event/delegate>
 //= require <dom/event/delegate>
 //= require <dom/find_node_position>
 //= require <dom/get_node_style>
 //= require <dom/has_class_name>
 //= require <dom/set_interval>
+//= require <dom/find_ancestor_or_self>
 //= require <empty_function>
+//= require <dom/event/prevent_select>
 
 var active_drag,
 current_z_index = 1,
@@ -18,7 +22,7 @@ parse_pixel_value = function (value) {
 wait = 1E3 / 12,
 prepare = function () {
 	// capture mouseup to end this
-	canceler = $$_dom_event_add_listener($$window,$mouseup,function (e,oe) {
+	canceler = $$_dom_event_add_listener($$document,$mouseup,function (e,oe) {
 		active_drag && active_drag();
 	});
 
@@ -63,7 +67,7 @@ begin_dragging = function (data) {
 	};
 
 	// capture mouse position
-	mouse_coordinate_watcher = $$_dom_event_add_listener($$window,$mousemove,function (e,oe) {
+	mouse_coordinate_watcher = $$_dom_event_add_listener($$document,$mousemove,function (e,oe) {
 		//console.log('watching mouse coordinates');
 		current_mouse_coordinates = oe[$get_mouse_coordinates]();
 	});
@@ -76,21 +80,22 @@ begin_dragging = function (data) {
 		target[$style][$top] = (original_top + (current_mouse_coordinates[$y] - original_mouse_coordinates[$y])) + 'px';
 	},wait);
 
+},
+var is_draggable = function (n) {
+	return $$_dom_has_class_name(n,$draggable);
 };
 
+$$_dom_event_prevent_select(is_draggable);
 $$_dom_event_delegate({
 	ancestor: $$document[$body],
 	type: $mousedown,
-	test: function (n) {
-		return $$_dom_has_class_name(n,$draggable);
-	},
+	test: is_draggable,
 	action: function (e,oe) {
 		if (!active_drag) {
 			begin_dragging({
 				target: oe[$delegate_target],
 				mouse_coordinates: oe[$get_mouse_coordinates]()
 			});
-			oe[$prevent_default]();
 		}
 	}
 });
