@@ -1,4 +1,3 @@
-Rakefile
 *.sw[opn]
 *.debug.js
 *.min.js
