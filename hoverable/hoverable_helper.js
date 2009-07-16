@@ -3,10 +3,10 @@
 //= require <dom/has_class_name>
 //= require <dom/add_class_name>
 //= require <dom/remove_class_name>
-$$_ui_hoverable_helper = $$_ui[$hoverable_helper] = function () {
+$$_ui_hoverable_helper = $$_ui.hoverable_helper = function () {
 
 	$$_ui_hoverable({
-		ancestor: $$document,
+		ancestor: document,
 		test: function (n) {
 			return $$_dom_has_class_name(n,$hoverable);
 		},
