@@ -1,6 +1,6 @@
 //= require <oatlib-ui/reference>
 //= require <dom/event/delegate>
-//= require <dom/event/contains>
+//= require <dom/contains>
 
 $$_ui_hoverable = $$_ui.hoverable = function (data) {
 	var hover = data.hover,
