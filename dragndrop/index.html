@@ -8,8 +8,8 @@
 				margin: 0;
 			}
 			.pane {
-				width: 200px;
-				height: 150px;
+				width: 70px;
+				height: 70px;
 				border: 1px solid red;
 			}
 			.red {
@@ -28,14 +28,32 @@
 				cursor: move;
 				cursor: -moz-hand;
 			}
+			.box {
+				padding: 20px;
+				background-color: #000;
+				width: 100px;
+				min-height: 100px;
+				float: left;
+				margin: 30px;
+			}
 		</style>
 	</head>
 	<body>
-		<div class="pane draggable red">nab</div>
-		<div class="pane draggable green">nab</div>
-		<div class="pane draggable blue">nab</div>
-		<div>
-			ither text
+		<div class="droppable box">
+			<div class="pane draggable red">nab</div>
+			<div class="pane draggable blue">nab</div>
+			<div class="pane draggable green">nab</div>
+		</div>
+		<div class="droppable box">
+			<div class="pane draggable red">nab</div>
+			<div class="pane draggable blue">nab</div>
+			<div class="pane draggable green">nab</div>
+		</div>
+		<div class="droppable box">
+			<div class="pane draggable blue">nab</div>
+			<div class="pane draggable green">nab</div>
+		</div>
+		<div class="droppable box">
 		</div>
 		<script src="../oatlib-ui.debug.js"></script>
 	</body>
