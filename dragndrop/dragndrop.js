@@ -6,6 +6,9 @@
 //= require <dom/get_element_at_point>
 //= require <dom/get_style>
 //= require <dom/has_class_name>
+//= require <dom/get_scroll_offsets>
+//= require <supplant>
+//= require <dom/get_window_size>
 //= require <dom/hide>
 //= require <dom/insert_after>
 //= require <dom/insert_before>
@@ -45,6 +48,10 @@ begin_dragging = function (data) {
 	current_mouse_coordinates = original_mouse_coordinates,
 	current_element_at_point,
 	mouse_coordinate_watcher,
+	window_size_watcher,
+	current_window_size = $$_dom_get_window_size(),
+	scroll_offsets_watcher,
+	current_scroll_offsets = $$_dom_get_scroll_offsets(),
 	interval,
 	canceler,
 	offsetWidth = target.offsetWidth,
@@ -61,8 +68,11 @@ begin_dragging = function (data) {
 	original_top = position.y;
 	original_left = position.x;
 
+	// this is a function that will cancel everything that was setup
 	active_drag = function () {
 		mouse_coordinate_watcher();
+		window_size_watcher();
+		scroll_offsets_watcher();
 		$$_dom_clear_interval(interval);
 		$$_dom_insert_before(fake,target);
 		$$_dom_remove(fake);
@@ -70,14 +80,29 @@ begin_dragging = function (data) {
 		active_drag = undefined;
 	};
 
+	// we watch for the document to scroll. when it does, re record the current scroll pos. we use this later to let the user scroll with their draggable in hand
+	scroll_offsets_watcher = $$_dom_event_add_listener(window,$scroll,function (e,oe) {
+		current_scroll_offsets = $$_dom_get_scroll_offsets();
+	});
+
+	// we watch window size for the same reason
+	window_size_watcher = $$_dom_event_add_listener(window,$resize,function (e,oe) {
+		current_window_size = $$_dom_get_window_size();
+	});
+
 	mouse_coordinate_watcher = $$_dom_event_add_listener(document,$mousemove,function (e,oe) {
+
+		// update your stored stuff for next time
 		var old_mouse_coordinates = current_mouse_coordinates,
 		old_element_at_point = current_element_at_point;
 		current_mouse_coordinates = oe.get_mouse_coordinates();
+		
+		// we hide the draggable over and over, otherwise we cant figure out what its over cause it shims everything!!!!??
 		$$_dom_hide(target);
 
 		current_element_at_point = $$_dom_get_element_at_point(current_mouse_coordinates);
 
+		// determine if the draggable is on a droppable and if so, move stuff
 		current_element_at_point && current_element_at_point !== fake && current_element_at_point !== old_element_at_point && $$_dom_find_ancestor_or_self(current_element_at_point,function (n) {
 			if ($$_dom_has_class_name(n,'draggable')) {
 				old_mouse_coordinates.y > current_mouse_coordinates.y ? $$_dom_insert_before(n,fake) : $$_dom_insert_after(n,fake);
@@ -89,8 +114,27 @@ begin_dragging = function (data) {
 		});
 
 		$$_dom_unhide(target);
+
+		// determine if the document needs to be scrolled
+		var y = current_scroll_offsets.y, x = current_scroll_offsets.x, width = current_window_size.width, height = current_window_size.height, my = current_mouse_coordinates.y, mx = current_mouse_coordinates.x, newy, newx;
+
+		if (y + 30 > my) {
+			newy = y - 60;
+		}	else if (y + height - 30 < my) {
+			newy = y + 60;
+		}
+
+		if (x + 30 > mx) {
+			newx = x - 60;
+		}	else if (x + width - 30 < mx) {
+			newx = x + 60;
+		}
+
+		(newy || newx) && window.scrollTo(newx || x,newy || y);
+
 	});
 
+	// we constantly move the target draggable under the cursor
 	interval = $$_dom_set_interval(function () {
 		target.style.left = (original_left + (current_mouse_coordinates.x - original_mouse_coordinates.x)) + 'px';
 		target.style.top = (original_top + (current_mouse_coordinates.y - original_mouse_coordinates.y)) + 'px';
@@ -103,7 +147,7 @@ is_draggable = function (n) {
 
 $$_dom_event_prevent_select(is_draggable);
 $$_dom_event_delegate({
-	ancestor: document[$body],
+	ancestor: document.body,
 	type: $mousedown,
 	test: is_draggable,
 	action: function (e,oe) {
