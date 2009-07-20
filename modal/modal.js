@@ -58,7 +58,7 @@
 
 		payload = {
 			overlay_node: overlay_node,
-			modal_node: modal_node,
+			modal_node: modal_node
 		};
 
 		init = function () {};
@@ -77,7 +77,7 @@
 		var interesting_node = modal_node.firstChild;
 
 		while (interesting_node.firstChild) {
-			$$_dom_remove(interesting_node.firstChild)
+			$$_dom_remove(interesting_node.firstChild);
 		}
 
 		interesting_node.appendChild(contentNode);

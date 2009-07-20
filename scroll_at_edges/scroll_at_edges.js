@@ -5,7 +5,6 @@
 $$_ui_scroll_at_edges = $$_ui.scroll_at_edges = function () {
 	var current_window_size = $$_dom_get_window_size(),
 	current_scroll_offsets = $$_dom_get_scroll_offsets(),
-	current_scroll_offsets = $$_dom_get_scroll_offsets(),
 	current_mouse_coordinates,
 	cancel_window_size_watcher = $$_dom_event_add_listener(window,$resize,function (e,oe) {
 		current_window_size = $$_dom_get_window_size();

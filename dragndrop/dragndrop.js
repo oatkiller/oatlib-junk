@@ -1,7 +1,11 @@
 //= require <dom/absolutize>
+//= require <dom/array>
+//= require <find>
+//= require <dom/find_position>
 //= require <dom/clear_interval>
 //= require <oatlib-ui/scroll_at_edges/scroll_at_edges>
 //= require <dom/event/delegate>
+//= require <dom/add_class_name>
 //= require <dom/event/prevent_select>
 //= require <dom/find_ancestor_or_self>
 //= require <dom/get_element_at_point>
@@ -14,6 +18,7 @@
 //= require <dom/insert_before>
 //= require <dom/node>
 //= require <dom/remove>
+//= require <dom/remove_class_name>
 //= require <dom/set_interval>
 //= require <dom/unhide>
 //= require <empty_function>
@@ -43,7 +48,7 @@ begin_dragging = function (data) {
 	current_scroll_offsets = $$_dom_get_scroll_offsets(),
 	update_target_position,
 	cancel_mouseup,
-	cancel_auto_scroller = $$_ui_scroll_at_edges();
+	cancel_auto_scroller = $$_ui_scroll_at_edges(),
 	target_offset_width = target_node.offsetWidth,
 	target_offset_height = target_node.offsetHeight,
 	drop_marker_node = $$_dom_node('<div></div>');
@@ -55,6 +60,8 @@ begin_dragging = function (data) {
 
 	target_node.style.zIndex = ++current_z_index;
 
+	$$_dom_add_class_name(target_node,'in_drag');
+
 	starting_point_y = position.y;
 	starting_point_x = position.x;
 
@@ -65,7 +72,8 @@ begin_dragging = function (data) {
 		$$_dom_clear_interval(update_target_position);
 		$$_dom_insert_before(drop_marker_node,target_node);
 		$$_dom_remove(drop_marker_node);
-		target_node.style.position = target_node.style.top = target_node.style.left = emptyString;
+		$$_dom_remove_class_name(target_node,'in_drag');
+		target_node.style.width = target_node.style.height = target_node.style.position = target_node.style.top = target_node.style.left = emptyString;
 		cancel_active_drag = undefined;
 		cancel_mouseup();
 	};
@@ -92,8 +100,16 @@ begin_dragging = function (data) {
 				old_mouse_coordinates.y > current_mouse_coordinates.y ? $$_dom_insert_before(n,drop_marker_node) : $$_dom_insert_after(n,drop_marker_node);
 				return true;
 			} else if ($$_dom_has_class_name(n,'droppable')) {
-				n.appendChild(drop_marker_node);
-				return true;
+				var the_one;
+				if (the_one = $$_dom_array(n.childNodes)[$$_o$find](function (l) {
+					return $$_dom_has_class_name(l,'draggable') && $$_dom_find_position(l).y > current_mouse_coordinates.y;
+				})) {
+					$$_dom_insert_before(the_one,drop_marker_node);
+					return true;
+				} else {
+					n.appendChild(drop_marker_node);
+					return true;
+				}
 			}
 		});
 
