@@ -1,0 +1,56 @@
+/* margin and padding on html and body is bad for calculating widths and heights. dont use them! */
+html, body {
+	margin: 0; padding: 0;
+}
+
+/* overlayed is a class on the html node when the overlay is up, the html node is overflow hidden to block the scrollbars, and to facilitate the ie6 positioned fix hack-around */
+.overlayed {
+	overflow: hidden;
+}
+
+.overlayed .overlay, .overlayed .modal {
+	display: block;
+}
+
+/* the body will be the exact width and height of the html node. the html node gets its width and height set to the width and height of the window via javascript */
+.overlayed body {
+	width: 100%;
+	height: 100%;
+}
+
+/* shared overlay class. this sets up something to be the size of the browser window, and puts it in view */
+.overlay {
+	position: fixed;
+	_position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+/* shield is an overlay you could use to black out the whole site contents */
+.shield {
+	background-color: #000;
+	opacity: .85;
+	filter: alpha(opacity=85);	
+	/* its z-index is higher than everything but the other overlay */
+	z-index: 2;
+}
+
+/* the modal wrapper is higher than the shield. fo ril */
+.modalWrapper {
+	z-index: 3;
+}
+
+/* the modal is the div thats got some contents in it*/
+.modal {
+	position: absolute;
+	left: 10%;
+	top: 10%;
+	width: 80%;
+	height: 80%;
+	background-color: #fff;
+	display: none;
+}
+
