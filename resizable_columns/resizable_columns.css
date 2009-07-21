@@ -1,0 +1,32 @@
+html, body, .resizable_column_pane {
+	border-width: 0;
+	border: none;
+	height: 100%;
+	width: 100%;
+}
+.resizable_column_handle,
+.resizable_column {
+	height: 100%;
+}
+.resizable_column {
+	background: rgba(0,0,0,.85) !important;
+	background: rgb(216,216,216);
+	position: relative;
+}
+.resizable_column_handle {
+	width: 13px;
+	background: rgba(0,0,0,.5) !important;
+	background: rgb(127,127,127);
+	position: absolute;
+	right: 0;
+	top: 0;
+	cursor: e-resize;
+}
+
+.box {
+	width: 100px;
+	height: 100px;
+	margin: 20px;
+	background-color: red;
+	float: left;
+}

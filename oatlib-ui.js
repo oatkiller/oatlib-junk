@@ -1,1 +1,1 @@
-//= require <oatlib-ui/dragndrop/dragndrop>
+//= require <oatlib-ui/resizable_columns/example>

@@ -39,7 +39,7 @@ begin_dragging = function (data) {
 	var target_node = data.target_node,
 	starting_point_x = 0,
 	starting_point_y = 0,
-	get_style = $$_dom_get_style[$$_o$curry](target_node),
+	get_style = $$_dom_get_style[o.curry](target_node),
 	original_mouse_coordinates = data.mouse_coordinates,
 	current_mouse_coordinates = original_mouse_coordinates,
 	current_element_at_point,
@@ -101,7 +101,7 @@ begin_dragging = function (data) {
 				return true;
 			} else if ($$_dom_has_class_name(n,'droppable')) {
 				var the_one;
-				if (the_one = $$_dom_array(n.childNodes)[$$_o$find](function (l) {
+				if (the_one = $$_dom_array(n.childNodes)[o.find](function (l) {
 					return $$_dom_has_class_name(l,'draggable') && $$_dom_find_position(l).y > current_mouse_coordinates.y;
 				})) {
 					$$_dom_insert_before(the_one,drop_marker_node);
