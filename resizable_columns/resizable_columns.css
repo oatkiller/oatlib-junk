@@ -1,11 +1,9 @@
 html, body, .resizable_column_pane {
 	border-width: 0;
 	border: none;
-	height: 100%;
 	width: 100%;
 }
-.resizable_column_handle,
-.resizable_column {
+.resizable_column_handle {
 	height: 100%;
 }
 .resizable_column {
@@ -24,9 +22,7 @@ html, body, .resizable_column_pane {
 }
 
 .box {
-	width: 100px;
 	height: 100px;
 	margin: 20px;
 	background-color: red;
-	float: left;
 }
