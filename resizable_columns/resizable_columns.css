@@ -3,6 +3,12 @@ html, body, .resizable_column_pane {
 	border: none;
 	width: 100%;
 }
+.resizable_column_pane {
+	height: 100%;
+	border: none;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
 .resizable_column_handle {
 	height: 100%;
 }
@@ -10,19 +16,19 @@ html, body, .resizable_column_pane {
 	background: rgba(0,0,0,.85) !important;
 	background: rgb(216,216,216);
 	position: relative;
+	min-width: 100px;
+	min-height: 100px;
 }
 .resizable_column_handle {
 	width: 13px;
 	background: rgba(0,0,0,.5) !important;
 	background: rgb(127,127,127);
-	position: absolute;
-	right: 0;
-	top: 0;
 	cursor: e-resize;
 }
 
 .box {
 	height: 100px;
 	margin: 20px;
-	background-color: red;
+	background-color: rgba(0,0,0,.85);
+	color: #fff;
 }
