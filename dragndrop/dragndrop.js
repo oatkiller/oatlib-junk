@@ -8,7 +8,6 @@
 //= require <dom/add_class_name>
 //= require <dom/event/prevent_select>
 //= require <dom/find_ancestor_or_self>
-//= require <dom/get_element_at_point>
 //= require <dom/get_style>
 //= require <dom/has_class_name>
 //= require <dom/get_scroll_offsets>
@@ -73,7 +72,7 @@ begin_dragging = function (data) {
 		$$_dom_insert_before(drop_marker_node,target_node);
 		$$_dom_remove(drop_marker_node);
 		$$_dom_remove_class_name(target_node,'in_drag');
-		target_node.style.width = target_node.style.height = target_node.style.position = target_node.style.top = target_node.style.left = emptyString;
+		target_node.style.width = target_node.style.height = target_node.style.position = target_node.style.top = target_node.style.left = target_node.style.margin = emptyString;
 		cancel_active_drag = undefined;
 		cancel_mouseup();
 	};
@@ -92,7 +91,7 @@ begin_dragging = function (data) {
 		// we hide the draggable over and over, otherwise we cant figure out what its over cause it shims everything!!!!??
 		$$_dom_hide(target_node);
 
-		current_element_at_point = $$_dom_get_element_at_point(current_mouse_coordinates);
+		current_element_at_point = oe.get_element_from_point();
 
 		// determine if the draggable is on a droppable and if so, move stuff
 		current_element_at_point && current_element_at_point !== drop_marker_node && current_element_at_point !== old_element_at_point && $$_dom_find_ancestor_or_self(current_element_at_point,function (n) {
