@@ -52,7 +52,8 @@
 		end = start + d,
 		tween = data.tween,
 		on_complete = data.on_complete,
-		callback = data.callback;
+		callback = data.callback,
+		on_start = data.on_start;
 		add_thing_to_tick(function () {
 			// calculate time as the current time
 			// if time is greater than or equal to end, run the callback with the final value (calculated as begin + change)
@@ -61,6 +62,8 @@
 			// if time is less than end, run callback with the result of tween, passing it the time passed so far (calculated as time - start), b, c, and d
 			// return true
 			var time = new Date().getTime();
+			on_start && (on_start() && (on_start = false));
+
 			if (time >= end) {
 				callback(b + c);
 				on_complete && on_complete();

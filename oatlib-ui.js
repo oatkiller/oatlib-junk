@@ -1,1 +1,2 @@
-//= require <oatlib-ui/resizable_columns/example>
+//= require <oatlib-ui/serialize/serialize>
+//= require <dom/element>

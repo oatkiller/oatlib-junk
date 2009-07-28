@@ -31,7 +31,6 @@ $$_ui_effects_tronline = $$_ui_effects.tronline = function (coordinates,style) {
 
 		// transition from the top-left to the bottom-left
 		function (ctx) {
-			console.log('wrtf');
 			ctx.translate(3,3);
 			ctx.rotate(.5 * $$_pi);
 		},

@@ -16,7 +16,7 @@
 //= require <dom/hide>
 //= require <dom/insert_after>
 //= require <dom/insert_before>
-//= require <dom/node>
+//= require <dom/create_element>
 //= require <dom/remove>
 //= require <dom/remove_class_name>
 //= require <dom/set_interval>
@@ -53,7 +53,7 @@ $$_ui_dragndrop = $$_ui.dragndrop = function (is_draggable,is_droppable) {
 		cancel_auto_scroller = $$_ui_scroll_at_edges(),
 		target_offset_width = target_node.offsetWidth,
 		target_offset_height = target_node.offsetHeight,
-		drop_marker_node = $$_dom_node('<div></div>');
+		drop_marker_node = $$_dom_create_element('div');
 
 		$$_dom_insert_before(target_node,drop_marker_node);
 		var position = $$_dom_absolutize(target_node);
