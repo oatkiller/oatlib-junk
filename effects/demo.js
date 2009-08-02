@@ -6,35 +6,35 @@
 //= require <dom/find_following_sibling_or_self>
 //= require <oatlib-ui/effects/tronline>
 //= require <oatlib-ui/effects/shrink>
-($$_ui_effects_demo = $$_ui_effects.demo = function () {
-	$$_dom_event_delegate({
+(o.ui.effects.demo = function () {
+	o.dom.event.delegate({
 		test: function (n) {
-			return $$_dom_has_class_name(n,'tronline_on_click');
+			return o.dom.has_class_name(n,'tronline_on_click');
 		},
 		action: function (e,oe) {
 			var target = oe.delegate_target;
-			$$_ui_effects_tronline($$_dom_find_position(target).rect);
+			o.ui.effects.tronline(o.dom.find_position(target).rect);
 		}
 	});
 
-	$$_dom_event_delegate({
+	o.dom.event.delegate({
 		test: function (n) {
-			return $$_dom_has_class_name(n,'shrink');
+			return o.dom.has_class_name(n,'shrink');
 		},
 		action: function (e,oe) {
-			$$_ui_effects_shrink({
-				node: $$_dom_find_following_sibling_or_self(oe.delegate_target,function (n) {return $$_dom_has_class_name(n,'me');})
+			o.ui.effects.shrink({
+				node: o.dom.find_following_sibling_or_self(oe.delegate_target,function (n) {return o.dom.has_class_name(n,'me');})
 			});
 		}
 	});
 
-	$$_dom_event_delegate({
+	o.dom.event.delegate({
 		test: function (n) {
-			return $$_dom_has_class_name(n,'unshrink');
+			return o.dom.has_class_name(n,'unshrink');
 		},
 		action: function (e,oe) {
-			$$_ui_effects_unshrink({
-				node: $$_dom_find_following_sibling_or_self(oe.delegate_target,function (n) {return $$_dom_has_class_name(n,'me');})
+			o.ui.effects.unshrink({
+				node: o.dom.find_following_sibling_or_self(oe.delegate_target,function (n) {return o.dom.has_class_name(n,'me');})
 			});
 		}
 	});

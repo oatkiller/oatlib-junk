@@ -13,7 +13,7 @@
 	stop_interval_if_needed = function () {
 		// if there are no items in 'things_to_tick', clear the interval stored in 'interval'. also set interval to null
 		if (!things_to_tick.length) {
-			$$_dom_clear_interval(interval);
+			o.dom.clear_interval(interval);
 			interval = null;
 		}
 	},
@@ -27,17 +27,17 @@
 		// run 'stop_interval_if_needed'
 		// reset 'things_to_tick' to the result of a filter of 'things_to_tick'
 		// the filter should run invoke
-		$$_splice.apply(things_to_tick,[0,things_to_tick.length].concat(things_to_tick[o.filter]($$_invoke)));
+		Array.prototype.splice.apply(things_to_tick,[0,things_to_tick.length].concat(things_to_tick[o.filter](o.invoke)));
 		stop_interval_if_needed();
 	},
 	start_interval = function () {
 		// if the interval isnt already started, start it
 		// save the interval to 'interval'
 		// set the interval to use the time specified in 'wait'
-		return !interval && (interval = $$_dom_set_interval(tick,wait));
+		return !interval && (interval = o.dom.set_interval(tick,wait));
 	};
 
-	$$_ui_transition = $$_ui.transition = function (data) {
+	o.ui.transition = function (data) {
 		// calculate b as the start property of data
 		// calculate c as the difference of the end property of data and b
 		// calculate d as the duration property of data

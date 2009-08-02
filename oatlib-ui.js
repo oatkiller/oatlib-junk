@@ -1,2 +1,1 @@
-//= require <oatlib-ui/serialize/serialize>
-//= require <dom/element>
+//= require <oatlib-ui/dragndrop/dragndrop_helper>

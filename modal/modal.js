@@ -29,32 +29,32 @@
 
 		modal_showing = true;
 
-		$$_dom_add_class_name(html,html_class_name);
+		o.dom.add_class_name(html,html_class_name);
 
-		$$_dom_set_timeout(function () {
+		o.dom.set_timeout(function () {
 			if (!resize_listener) {
-				resize_listener = $$_dom_event_add_listener(window,'resize',$$_dom_debounce(size_modal));
+				resize_listener = o.dom.event.add_listener(window,'resize',o.dom.debounce(size_modal));
 			}
 		},0);
 
 	},
 	size_modal = function () {
-		var size = $$_dom_get_window_size();
+		var size = o.dom.get_window_size();
 		html.style.height = size.height + 'px';
 		html.style.width = size.width + 'px';
 	},
 	undo_size_modal = function () {
-		html.style.height = html.style.width = emptyString;
+		html.style.height = html.style.width = '';
 	},
 	init = function () {
-		overlay_node = $$_dom_node(overlay_node_markup);
-		modal_node = $$_dom_node(modal_node_markup);
+		overlay_node = o.dom.node(overlay_node_markup);
+		modal_node = o.dom.node(modal_node_markup);
 
 		body = document.body;
 		html = body.parentNode;
 
-		$$_dom_prepend_child(body,modal_node);
-		$$_dom_prepend_child(body,overlay_node);
+		o.dom.prepend_child(body,modal_node);
+		o.dom.prepend_child(body,overlay_node);
 
 		payload = {
 			overlay_node: overlay_node,
@@ -64,7 +64,7 @@
 		init = function () {};
 	};
 
-	$$_ui_modal = $$_ui.modal = function (callback,contentNode) {
+	o.ui.modal = function (callback,contentNode) {
 
 		init();
 
@@ -77,7 +77,7 @@
 		var interesting_node = modal_node.firstChild;
 
 		while (interesting_node.firstChild) {
-			$$_dom_remove(interesting_node.firstChild);
+			o.dom.remove(interesting_node.firstChild);
 		}
 
 		interesting_node.appendChild(contentNode);
@@ -88,13 +88,13 @@
 
 	};
 
-	$$_ui_hide_modal = $$_ui.hide_modal = function (callback) {
+	o.ui.hide_modal = function (callback) {
 
 		callback && callback(payload);
 
 		modal_showing = false;
 
-		$$_dom_remove_class_name(html,html_class_name);
+		o.dom.remove_class_name(html,html_class_name);
 
 		resize_listener && resize_listener();
 

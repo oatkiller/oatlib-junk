@@ -1,5 +1,5 @@
 //= require <oatlib-ui/effects/reference>
-$$_ui_effects_place_canvas = $$_ui_effects.place_canvas = function (coordinates) {
+o.ui.effects.place_canvas = function (coordinates) {
 	var canvas = document.createElement('canvas'),
 	context;
 	canvas.width = coordinates.width;
