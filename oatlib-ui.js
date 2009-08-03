@@ -1,1 +1,1 @@
-//= require <oatlib-ui/dragndrop/dragndrop_helper>
+//= require <oatlib-ui/drag/drop_example>
