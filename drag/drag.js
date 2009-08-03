@@ -33,6 +33,13 @@ o.ui.drag = function (options) {
 	 		oe: data.oe
 		};
 
+		event.fire({
+			type: 'on_before_start_drag',
+			target: target_node,
+			e: data.e,
+			oe: data.oe
+		});
+
 		var position = o.dom.absolutize(target_node);
 
 		target_node.style.zIndex = ++current_z_index;
