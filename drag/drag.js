@@ -28,10 +28,7 @@ o.ui.drag = function (options) {
 		mouse_coordinate_watcher,
 		update_target_position,
 		cancel_mouseup,
-		updated_event = {
-			e: data.e,
-	 		oe: data.oe
-		};
+		try_updating_target_position = true;
 
 		event.fire({
 			type: 'on_before_start_drag',
@@ -69,33 +66,33 @@ o.ui.drag = function (options) {
 
 		mouse_coordinate_watcher = o.dom.event.add_listener(document,'mousemove',function (e,oe) {
 
-			// update your stored stuff for next time
-			var new_mouse_coordinates = oe.get_mouse_coordinates();
+			if (try_updating_target_position) {
+				// update your stored stuff for next time
+				var new_mouse_coordinates = oe.get_mouse_coordinates();
 
-			if (new_mouse_coordinates.x !== current_mouse_coordinates.x || new_mouse_coordinates.y !== current_mouse_coordinates.y) {
-				current_mouse_coordinates = new_mouse_coordinates;
-				updated_event = {e: e, oe: oe};
-			} else {
-				updated_event = false;
+				try_updating_target_position = false; // only do this once per tick
+
+				if (new_mouse_coordinates.x !== current_mouse_coordinates.x || new_mouse_coordinates.y !== current_mouse_coordinates.y) {
+					current_mouse_coordinates = new_mouse_coordinates;
+
+					target_node.style.left = (starting_point_x + (current_mouse_coordinates.x - original_mouse_coordinates.x)) + 'px';
+					target_node.style.top = (starting_point_y + (current_mouse_coordinates.y - original_mouse_coordinates.y)) + 'px';
+
+					event.fire({
+						type: 'on_updated_position',
+						target: target_node,
+						e: e,
+						oe: oe
+					});
+
+				}
 			}
 
 		});
 
 		// we constantly move the target draggable under the cursor
 		update_target_position = o.dom.set_interval(function () {
-			if (updated_event) {
-
-				event.fire({
-					type: 'on_updated_position',
-					target: target_node,
-					e: updated_event.e,
-					oe: updated_event.oe
-				});
-
-				target_node.style.left = (starting_point_x + (current_mouse_coordinates.x - original_mouse_coordinates.x)) + 'px';
-				target_node.style.top = (starting_point_y + (current_mouse_coordinates.y - original_mouse_coordinates.y)) + 'px';
-				updated_event = false;
-			}
+			try_updating_target_position = true;
 		},wait);
 
 		event.fire({
