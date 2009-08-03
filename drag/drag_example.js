@@ -1,2 +1,2 @@
-//= require <oatlib-ui/drag_helper>
+//= require <oatlib-ui/drag/drag_helper>
 o.ui.drag_helper();

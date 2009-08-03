@@ -20,7 +20,7 @@ o.ui.drop = function (options) {
 	is_draggable = options.draggable,
 	is_droppable = options.droppable;
 
-	options.event.multi_subscribe({
+	options.drag_event.multi_subscribe({
 		on_start_drag: function (data) {
 			target = data.target;
 			drop_marker_node = get_drop_marker_node();

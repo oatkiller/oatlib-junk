@@ -1,17 +1,18 @@
 //= require <oatlib-ui/reference>
 //= require <oatlib-ui/drag/drag>
 //= require <application_event>
-//= require <before>
-//= require <for_each>
+
+
+
 o.ui.drag_helper = function () {
 
 	var my_event = o.application_event();
 	return o.ui.drag({
-		draggable: function (n) {
-			return o.dom.has_class_name(n,'draggable');
-		},
+		draggable: o.dom.has_class_name[o.rcurry]('draggable'),
 		event: my_event
 	});
+
+	return my_event;
 
 //my_event.multi_subscribe({
 //	'on_start_drag': function (data) {
