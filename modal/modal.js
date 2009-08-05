@@ -18,7 +18,6 @@
 	modal_node,
 	html,
 	body,
-	payload,
 	resize_listener,
 	html_class_name = 'overlayed',
 	overlay_node_markup = '<div class="overlay shield"></div>',
@@ -56,23 +55,12 @@
 		o.dom.prepend_child(body,modal_node);
 		o.dom.prepend_child(body,overlay_node);
 
-		payload = {
-			overlay_node: overlay_node,
-			modal_node: modal_node
-		};
-
 		init = function () {};
 	};
 
-	o.ui.modal = function (callback,contentNode) {
+	o.ui.modal = function (contentNode) {
 
 		init();
-
-		// if the user didnt pass two args, assume the passed one is the content node
-		if (arguments.length < 2) {
-			contentNode = callback;
-			callback = null;
-		}
 
 		var interesting_node = modal_node.firstChild;
 
@@ -84,13 +72,9 @@
 
 		!modal_showing && show_modal();
 
-		callback && callback(payload);
-
 	};
 
-	o.ui.hide_modal = function (callback) {
-
-		callback && callback(payload);
+	o.ui.hide_modal = function () {
 
 		modal_showing = false;
 
