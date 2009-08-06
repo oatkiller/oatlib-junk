@@ -1,1 +1,2 @@
-//= require <oatlib-ui/drop/drop_example>
+//= require <oatlib-ui/mvc/example>
+
