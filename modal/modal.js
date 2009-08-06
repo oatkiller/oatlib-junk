@@ -72,6 +72,8 @@
 
 		!modal_showing && show_modal();
 
+		return o.ui.hide_modal;
+
 	};
 
 	o.ui.hide_modal = function () {
