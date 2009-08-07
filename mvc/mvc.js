@@ -4,6 +4,7 @@
 //= require <array>
 //= require <dom/element>
 //= require <dom/event/delegate>
+//= require <supplant>
 (function () {
 
 	var mvc = (o.ui.mvc = {}),
@@ -35,7 +36,20 @@
 	}),
 	views = (mvc.views = get_views()),
 	get_view = (mvc.get_view = function (name) {
-		return views[name].cloneNode(true);
+
+		var matches = [], my_array, obj = {};
+		while (my_array = o.supplant_regex.exec(views[name].innerHTML)) {
+			matches.push(my_array[1]);
+		}
+		matches[o.each](function (key) {
+			obj[key] = '';
+		});
+		return populate_view(name,obj);
+	}),
+	populate_view = (mvc.populate_view = function (name,obj) {
+		var view = views[name].cloneNode(true);
+		view.innerHTML = view.innerHTML[o.supplant](obj);
+		return view;
 	});
 
 	o.dom.event.delegate({
