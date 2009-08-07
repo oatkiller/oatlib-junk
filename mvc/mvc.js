@@ -68,7 +68,7 @@
 		request: function () {
 			var that = this, args = o.array(arguments), request, timer = window.setTimeout(function () {
 				request = o.remote.request.apply(that,args);
-			},4000);
+			},2000);
 			return {
 				abort: function () {
 					timer && window.clearTimeout(timer);
@@ -150,16 +150,17 @@
 				}
 			});
 		}
+	})),
+	default_delegate_test = (mvc.default_delegate_test = function (node) {
+		return node.getAttribute !== undefined && node.getAttribute('action') !== null;
+	}),
+	default_delegate_action = (mvc.default_delegate_action = function (e,oe) {
+		var target = oe.delegate_target;
+		mvc.fire(target.getAttribute('action'),e,oe);
+	}),
+	default_delegate = (mvc.default_delegate = o.dom.event.delegate({
+		test: default_delegate_test,
+		action: default_delegate_action
 	}));
-
-	o.dom.event.delegate({
-		test: function (node) {
-			return node.getAttribute !== undefined && node.getAttribute('action') !== null;
-		},
-		action: function (e,oe) {
-			var target = oe.delegate_target;
-			mvc.fire(target.getAttribute('action'),e,oe);
-		}
-	});
 	
 })();
