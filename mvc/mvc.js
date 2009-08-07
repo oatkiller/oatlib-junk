@@ -5,6 +5,10 @@
 //= require <dom/element>
 //= require <dom/event/delegate>
 //= require <supplant>
+//= require <remote/query_string>
+//= require <remote/request>
+//= require <json/parse>
+//= require <map>
 (function () {
 
 	var mvc = (o.ui.mvc = {}),
@@ -50,9 +54,11 @@
 		return populate_view(name,obj);
 	}),
 	populate_view = (mvc.populate_view = function (name,obj) {
-		var view = views[name].cloneNode(true);
-		view.innerHTML = view.innerHTML[o.supplant](obj);
-		return view;
+		var view = views[name].cloneNode(true),
+		tmp = document.createElement('div');
+		tmp.appendChild(view);
+		tmp.innerHTML = tmp.innerHTML[o.supplant](obj);
+		return tmp.firstChild;
 	}),
 	resource = (mvc.resource = o.builder({
 		// implementer needs to provide these
@@ -67,7 +73,7 @@
 			return this.url + '.json';
 		},
 		get_token_query_string: function () {
-			return 'token=' + this.token;
+			return 'authenticity_token=' + encodeURIComponent(this.token);
 		},
 		add_token_query_string: function (s) {
 			return s + (s.length ? '&' : '') + this.get_token_query_string();
@@ -75,11 +81,17 @@
 		get_token_param_obj: function () {
 			return {key: 'token', value: this.token};
 		},
+		get_object_from_response: function (r) {
+			return o.json.parse(r.responseText)[this.name];
+		},
 		all: function (callback) {
+			var that = this;
 			return this.request({
 				url: this.get_json_url(),
 				on_success: function (r) {
-					callback(o.json.parse(r.responseText)[o.map](o.get_object_property[o.rcurry](name)));
+					callback(o.json.parse(r.responseText)[o.map](function (obj) {
+						return obj[that.name];
+					}));
 				},
 				on_failure: function (r) {
 					callback(r);
@@ -87,10 +99,11 @@
 			});
 		},
 		get: function (id,callback) {
+			var that = this;
 			return this.request({
 				url: this.get_url_for_id(id),
 				on_success: function (r) {
-					callback(o.json.parse(r.responseText)[name])
+					callback(that.get_object_from_response(r));
 				},
 				on_failure: function (r) {
 					callback(r);
@@ -106,33 +119,25 @@
 			});
 		},
 		create: function (array_of_params,callback) {
+			var that = this;
 			return this.request({
 				url: this.get_json_url(),
 				method: 'post',
 				body: this.add_token_query_string(o.remote.query_string(array_of_params)),
-				on_complete: callback
+				on_success: function (r) {
+					callback(o.json.parse(r.responseText)[that.name]);
+				}
 			});
 		},
 		update: function (id,array_of_params,callback) {
-			// js doesnt have multiple dispatch
-			var args = o.array(arguments), id, array_of_params, callback;
-			if (args.length === 3) {
-				id = args[0];
-				array_of_params = args[1];
-				callback = args[2];
-			} else {
-				id = args[0][o.find](function (param_obj) {
-					return param_obj.key === 'card[id]';
-				}).value;
-				array_of_params = args[0];
-				callback = args[1];
-			}
-
+			var that = this;
 			return this.request({
 				url: this.get_url_for_id(id),
 				method: 'put',
 				body: this.add_token_query_string(o.remote.query_string(array_of_params)),
-				on_complete: callback
+				on_success: function (r) {
+					callback(that.get_object_from_response(r));
+				}
 			});
 		}
 	}));
