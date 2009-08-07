@@ -65,7 +65,17 @@
 		// url: '/cards',
 		// name: 'card',
 		// token: 'asdf',
-		request: o.remote.request,
+		request: function () {
+			var that = this, args = o.array(arguments), request, timer = window.setTimeout(function () {
+				request = o.remote.request.apply(that,args);
+			},4000);
+			return {
+				abort: function () {
+					timer && window.clearTimeout(timer);
+					request && request.abort;
+				}
+			};
+		},
 		get_url_for_id: function (id) {
 			return this.url + '/{id}.json'[o.supplant]({id: id});
 		},
