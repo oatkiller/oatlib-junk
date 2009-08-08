@@ -15,6 +15,9 @@ o.ui.drop = function (options) {
 
 	var target,
 	current_element_at_point,
+	starting_parent,
+	starting_next_sibling,
+	starting_previous_sibling,
 	current_mouse_coordinates,
 	get_drop_marker_node = o.call_once(o.dom.create_element[o.curry]('div')),
 	event = options.event,
@@ -24,6 +27,9 @@ o.ui.drop = function (options) {
 	options.drag_event.multi_subscribe({
 		on_before_start_drag: function (data) {
 			target = data.target;
+			starting_parent = target.parentNode;
+			starting_next_sibling = target.nextSibling;
+			starting_previous_sibling = target.previousSibling;
 			drop_marker_node = get_drop_marker_node();
 
 			o.dom.insert_before(target,drop_marker_node);
@@ -95,6 +101,8 @@ o.ui.drop = function (options) {
 			o.dom.insert_before(drop_marker_node,target);
 			o.dom.remove(drop_marker_node);
 			drop_marker_node.style.width = drop_marker_node.style.height = drop_marker_node.style.visibility = drop_marker_node.className = target.style.width = target.style.height = target.style.position = target.style.top = target.style.left = target.style.margin = '';
+
+			data.displaced = starting_parent !== target.parentNode || starting_next_sibling !== target.nextSibling || starting_previous_sibling !== target.previousSibling;
 
 			event.fire({
 				type: 'on_drop',

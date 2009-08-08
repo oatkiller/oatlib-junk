@@ -6,21 +6,21 @@
 o.ui.drop_helper = function () {
 	var draggable = o.dom.has_class_name[o.rcurry]('draggable'),
 	droppable = o.dom.has_class_name[o.rcurry]('droppable'),
-	event = o.application_event(),
-	my_event = o.application_event();
+	drag_event = o.application_event(),
+	drop_event = o.application_event();
 
 	o.ui.drag({
 		draggable: draggable,
-		event: event
+		event: drag_event
 	});
 
 	o.ui.drop({
-		drag_event: event,
-		event: my_event,
+		drag_event: drag_event,
+		event: drop_event,
 		draggable: draggable,
 		droppable: droppable
 	});
 
-	return my_event;
+	return drop_event;
 
 };

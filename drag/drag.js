@@ -1,23 +1,24 @@
 //= require <dom/absolutize>
 //= require <oatlib-ui/reference>
-//= require <dom/clear_interval>
 //= require <dom/event/delegate>
-//= require <dom/get_window_size>
 //= require <dom/event/prevent_select>
-//= require <dom/get_scroll_offsets>
-//= require <dom/set_interval>
-//= require <curry>
-//= require <application_event>
-//= require <dom/has_class_name>
 //= require <empty_function>
+//= require <application_event>
 
 o.ui.drag = function (options) {
 
-	var cancel_active_drag,
-	is_draggable = options.draggable,
+	// get references to options
+	var is_draggable = options.draggable,
 	event = options.event || {fire: empty_function},
-	current_z_index = 1,
+
+	// set constants
 	wait = 1E3 / 32,
+
+	// scope vars
+	cancel_active_drag,
+	current_z_index = 1,
+
+	// main dragging routine
 	begin_dragging = function (data) {
 
 		var target_node = data.target_node,
@@ -47,7 +48,7 @@ o.ui.drag = function (options) {
 		// this is a function that will cancel everything that was setup
 		cancel_active_drag = function (e,oe) {
 			mouse_coordinate_watcher();
-			o.dom.clear_interval(update_target_position);
+			window.clearInterval(update_target_position);
 			target_node.style.width = target_node.style.height = target_node.style.position = target_node.style.top = target_node.style.left = target_node.style.margin = '';
 			cancel_active_drag = undefined;
 			cancel_mouseup();
@@ -91,7 +92,7 @@ o.ui.drag = function (options) {
 		});
 
 		// we constantly move the target draggable under the cursor
-		update_target_position = o.dom.set_interval(function () {
+		update_target_position = window.setInterval(function () {
 			try_updating_target_position = true;
 		},wait);
 
@@ -104,8 +105,10 @@ o.ui.drag = function (options) {
 
 	};
 
+	// prevent draggable things from being selected
 	o.dom.event.prevent_select(is_draggable);
 
+	// watch for the mousedown to begin it all
 	var cancel_delegate = o.dom.event.delegate({
 		ancestor: document.body,
 		type: 'mousedown',
