@@ -39,25 +39,22 @@
 		return result;
 	}),
 	views = (mvc.views = get_views()),
-	get_view_string = (mvc.get_view_string = function (name) {
-		return views[name].innerHTML;
-	}),
-	get_view = (mvc.get_view = function (name) {
-
+	get_empty_supplant_object = (mvc.get_empty_supplant_object = function (s) {
 		var matches = [], my_array, obj = {};
-		while (my_array = o.supplant_regex.exec(views[name].innerHTML)) {
+		while (my_array = o.supplant_regex.exec(s)) {
 			matches.push(my_array[1]);
 		}
 		matches[o.each](function (key) {
 			obj[key] = '';
 		});
-		return populate_view(name,obj);
+		return obj;
 	}),
 	populate_view = (mvc.populate_view = function (name,obj) {
 		var view = views[name].cloneNode(true),
 		tmp = document.createElement('div');
 		tmp.appendChild(view);
-		tmp.innerHTML = tmp.innerHTML[o.supplant](obj);
+		obj && (tmp.innerHTML = tmp.innerHTML[o.supplant](obj));
+		tmp.innerHTML = tmp.innerHTML[o.supplant](get_empty_supplant_object(tmp.innerHTML));
 		return tmp.firstChild;
 	}),
 	resource = (mvc.resource = o.builder({
@@ -65,17 +62,18 @@
 		// url: '/cards',
 		// name: 'card',
 		// token: 'asdf',
-		request: function () {
-			var that = this, args = o.array(arguments), request, timer = window.setTimeout(function () {
-				request = o.remote.request.apply(that,args);
-			},2000);
-			return {
-				abort: function () {
-					timer && window.clearTimeout(timer);
-					request && request.abort;
-				}
-			};
-		},
+//	request: function () {
+//		var that = this, args = o.array(arguments), request, timer = window.setTimeout(function () {
+//			request = o.remote.request.apply(that,args);
+//		},2000);
+//		return {
+//			abort: function () {
+//				timer && window.clearTimeout(timer);
+//				request && request.abort;
+//			}
+//		};
+//	},
+		request: o.remote.request,
 		get_url_for_id: function (id) {
 			return this.url + '/{id}.json'[o.supplant]({id: id});
 		},
