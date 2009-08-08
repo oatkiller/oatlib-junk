@@ -47,7 +47,8 @@
 	},
 	init = function () {
 		overlay_node = o.dom.node(overlay_node_markup);
-		modal_node = o.dom.node(modal_node_markup);
+		o.ui.modal_wrapper_node = modal_node = o.dom.node(modal_node_markup);
+		o.ui.modal_node = modal_node.firstChild;
 
 		body = document.body;
 		html = body.parentNode;
