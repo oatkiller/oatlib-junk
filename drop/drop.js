@@ -6,24 +6,18 @@
 //= require <dom/hide>
 //= require <dom/unhide>
 //= require <dom/array>
+//= require <are_same>
 //= require <find>
 //= require <dom/remove>
 //= require <dom/remove_class_name>
 //= require <dom/insert_after>
-//= require <trim>
-//= require <dom/find_preceding_sibling_or_self>
-//= require <dom/find_following_sibling_or_self>
+//= require <dom/surroundings>
 
 o.ui.drop = function (options) {
 
 	var target,
 	current_element_at_point,
-	starting_parent,
-	starting_next_sibling,
-	starting_previous_sibling,
-	isnt_whitespace_node = function (node) {
-		return node.nodeType !== 3 || node.nodeValue.trim() !== '';
-	},
+	starting_surroundings,
 	current_mouse_coordinates,
 	get_drop_marker_node = o.call_once(o.dom.create_element[o.curry]('div')),
 	event = options.event,
@@ -33,9 +27,7 @@ o.ui.drop = function (options) {
 	options.drag_event.multi_subscribe({
 		on_before_start_drag: function (data) {
 			target = data.target;
-			starting_parent = target.parentNode;
-			starting_next_sibling = o.dom.find_following_sibling_or_self(target.nextSibling,isnt_whitespace_node);
-			starting_previous_sibling = o.dom.find_preceding_sibling_or_self(target.previousSibling,isnt_whitespace_node);
+			starting_surroundings = o.dom.surroundings(target);
 			drop_marker_node = get_drop_marker_node();
 
 			o.dom.insert_before(target,drop_marker_node);
@@ -108,9 +100,7 @@ o.ui.drop = function (options) {
 			o.dom.remove(drop_marker_node);
 			drop_marker_node.style.width = drop_marker_node.style.height = drop_marker_node.style.visibility = drop_marker_node.className = target.style.width = target.style.height = target.style.position = target.style.top = target.style.left = target.style.margin = '';
 
-			var current_next_sibling = o.dom.find_following_sibling_or_self(target.nextSibling,isnt_whitespace_node),
-			current_previous_sibling = o.dom.find_preceding_sibling_or_self(target.previousSibling,isnt_whitespace_node);
-			data.displaced = starting_parent !== target.parentNode || starting_next_sibling !== current_next_sibling || starting_previous_sibling !== current_previous_sibling;
+			data.displaced = !o.are_same(starting_surroundings,o.dom.surroundings(target));
 
 			event.fire({
 				type: 'on_drop',
