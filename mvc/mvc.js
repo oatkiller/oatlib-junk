@@ -5,7 +5,7 @@
 //= require <dom/element>
 //= require <dom/event/delegate>
 //= require <supplant>
-//= require <remote/query_string>
+//= require <remote/query_string_from_obj>
 //= require <remote/request>
 //= require <json/parse>
 //= require <map>
@@ -131,7 +131,7 @@
 			return this.request({
 				url: this.get_json_url(),
 				method: 'post',
-				body: this.add_token_query_string(o.remote.query_string(array_of_params)),
+				body: this.add_token_query_string(o.remote.query_string_from_obj(array_of_params)),
 				on_success: function (r) {
 					callback(o.json.parse(r.responseText)[that.name]);
 				}
@@ -142,7 +142,7 @@
 			return this.request({
 				url: this.get_url_for_id(id),
 				method: 'put',
-				body: this.add_token_query_string(o.remote.query_string(array_of_params)),
+				body: this.add_token_query_string(o.remote.query_string_from_obj(array_of_params)),
 				on_success: function (r) {
 					callback(that.get_object_from_response(r));
 				}
