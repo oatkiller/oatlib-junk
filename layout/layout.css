@@ -1,0 +1,19 @@
+html, body, table {
+	width: 100%;
+	height: 100%;
+}
+body {
+	overflow: hidden;
+}
+html, body, table, tbody, tr, td, th {
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+td, th {
+	vertical-align: top;
+}
+table {
+	table-layout: fixed;
+	border-collapse: collapse;
+}
