@@ -32,7 +32,7 @@
 
 		o.dom.set_timeout(function () {
 			if (!resize_listener) {
-				resize_listener = o.dom.event.add_listener(window,'resize',o.dom.debounce(size_modal));
+				resize_listener = o.dom.event.add_listener(window,'resize',o.debounce(size_modal));
 			}
 		},0);
 

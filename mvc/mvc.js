@@ -97,12 +97,12 @@
 			return this.request({
 				url: this.get_json_url(),
 				on_success: function (r) {
-					callback(o.json.parse(r.responseText)[o.map](function (obj) {
+					callback && callback(o.json.parse(r.responseText)[o.map](function (obj) {
 						return obj[that.name];
 					}));
 				},
 				on_failure: function (r) {
-					callback(r);
+					callback && callback(r);
 				}
 			});
 		},
@@ -111,10 +111,10 @@
 			return this.request({
 				url: this.get_url_for_id(id),
 				on_success: function (r) {
-					callback(that.get_object_from_response(r));
+					callback && callback(that.get_object_from_response(r));
 				},
 				on_failure: function (r) {
-					callback(r);
+					callback && callback(r);
 				}
 			});
 		},
@@ -133,7 +133,7 @@
 				method: 'post',
 				body: this.add_token_query_string(o.remote.query_string_from_obj(array_of_params)),
 				on_success: function (r) {
-					callback(o.json.parse(r.responseText)[that.name]);
+					callback && callback(o.json.parse(r.responseText)[that.name]);
 				}
 			});
 		},
@@ -144,7 +144,7 @@
 				method: 'put',
 				body: this.add_token_query_string(o.remote.query_string_from_obj(array_of_params)),
 				on_success: function (r) {
-					callback(that.get_object_from_response(r));
+					callback && callback(that.get_object_from_response(r));
 				}
 			});
 		}

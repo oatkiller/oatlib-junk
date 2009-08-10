@@ -13,7 +13,6 @@
 		my_nodes[o.each](o.dom.hide);
 		window.setTimeout(function () {
 			my_nodes[o.each](function (node) {
-				console.log('resizing: ',node);
 				if (node.parentNode) {
 					node.style.height = node.parentNode.offsetHeight + 'px';
 					o.dom.unhide(node);
