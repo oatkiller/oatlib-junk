@@ -5,6 +5,7 @@
 //= require <filter>
 //= require <invoke>
 //= require <splice>
+//= require <oatlib-ui/transitions/sine_ease_in_out>
 
 (function () {
 	var interval,
@@ -50,7 +51,7 @@
 		d = data.duration,
 	 	start = new Date().getTime(),
 		end = start + d,
-		tween = data.tween,
+		tween = data.tween || o.ui.transitions.sine_ease_in_out,
 		on_complete = data.on_complete,
 		callback = data.callback,
 		on_start = data.on_start;
