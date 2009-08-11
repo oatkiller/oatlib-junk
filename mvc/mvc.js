@@ -126,15 +126,17 @@
 				on_complete: callback
 			});
 		},
-		create: function (array_of_params,callback) {
+		create: function (array_of_params,callbacks) {
 			var that = this;
 			return this.request({
 				url: this.get_json_url(),
 				method: 'post',
 				body: this.add_token_query_string(o.remote.query_string_from_obj(array_of_params)),
-				on_success: function (r) {
-					callback && callback(o.json.parse(r.responseText)[that.name]);
-				}
+				on_success: callbacks && callbacks.on_success && function (r) {
+					callbacks.on_success(o.json.parse(r.responseText)[that.name]);
+				},
+				on_complete: callbacks.on_complete,
+				on_failure: callbacks.on_failure
 			});
 		},
 		update: function (id,array_of_params,callback) {
