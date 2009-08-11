@@ -1,1 +1,1 @@
-//= require <oatlib-ui/multiple-keypress/example>
+//= require <oatlib-ui/effects/example>

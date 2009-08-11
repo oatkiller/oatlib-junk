@@ -8,6 +8,7 @@
 //= require <dom/remove_class_name>
 //= require <dom/set_timeout>
 //= require <oatlib-ui/reference>
+//= require <dom/empty>
 
 // ported from old oatlib. its a little weird but the css and everything is really solid
 
@@ -65,9 +66,7 @@
 
 		var interesting_node = modal_node.firstChild;
 
-		while (interesting_node.firstChild) {
-			o.dom.remove(interesting_node.firstChild);
-		}
+		o.dom.empty(interesting_node);
 
 		interesting_node.appendChild(contentNode);
 

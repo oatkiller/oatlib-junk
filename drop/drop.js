@@ -40,8 +40,6 @@ o.ui.drop = function (options) {
 
 			current_mouse_coordinates = data.oe.get_mouse_coordinates();
 
-			drop_marker_node.style.width = target.offsetWidth + 'px';
-			drop_marker_node.style.height = target.offsetHeight + 'px';
 			drop_marker_node.className = target.className + ' drop_marker';
 			drop_marker_node.style.visibility = 'hidden';
 			event.fire({

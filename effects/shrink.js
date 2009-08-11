@@ -1,5 +1,5 @@
 //= require <oatlib-ui/effects/reference>
-//= require <oatlib-ui/transition/sine_ease_in_out>
+//= require <oatlib-ui/transitions/sine_ease_in_out>
 //= require <oatlib-ui/transition/transition>
 //= require <dom/find_position>
 //= require <dom/hide>
@@ -10,7 +10,7 @@
 
 (function () {
 
-	var speed = .1E3,
+	var speed = 1E3,
 	tween = o.ui.sine_ease_in_out,
 	shrink_state_property = o.qname('shrink_state'),
 	shrink_state_classes = {

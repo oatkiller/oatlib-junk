@@ -1,6 +1,6 @@
 //= require <oatlib-ui/effects/reference>
 //= require <oatlib-ui/effects/place_canvas>
-//= require <oatlib-ui/transition/sine_ease_in_out>
+//= require <oatlib-ui/transitions/sine_ease_in_out>
 //= require <oatlib-ui/transition/transition>
 o.ui.effects.tronline = function (coordinates,style) {
 	var stuff = o.ui.effects.place_canvas(coordinates),
