@@ -9,7 +9,7 @@ test({
 		passed_obj,
 		valid = o.ui.validate(obj,{
 			'property': {
-				required: function (my_key,my_obj) {
+				required: function (my_key,offenders,my_obj) {
 					required = true;
 					passed_key = my_key;
 					passed_obj = my_obj;
@@ -38,7 +38,7 @@ test({
 				required: function () {
 					required = true;
 				},
-				integer: function (my_key,my_obj,offending_pairs) {
+				integer: function (my_key,offending_pairs,my_obj) {
 					integer_called = true;
 					passed_key = my_key;
 					passed_obj = my_obj;
@@ -61,7 +61,7 @@ test({
 		key = 'property',
 		passed_key,
 		passed_obj,
-		first_offending_obj = {key: key, value: '1234567',},
+		first_offending_obj = {key: key, value: '1234567'},
 		passed_first_offending_obj,
 		second_offending_obj = {key: key, value: '789012345'},
 		passed_second_offending_obj,
@@ -75,7 +75,7 @@ test({
 					integer_called = true;
 				},
 				max_length: 6,
-				nottolong: function (my_key,my_obj,offending_pairs) {
+				nottolong: function (my_key,offending_pairs,my_obj) {
 					nottolong_called = true;
 					passed_key = my_key;
 					passed_obj = my_obj;
@@ -91,6 +91,35 @@ test({
 		Assert.areSame(obj,passed_obj,'query_string_obj shouldve been passed when was called');
 		Assert.areSame(first_offending_obj,passed_first_offending_obj,'first_offending_obj shouldve been passed when was called');
 		Assert.areSame(second_offending_obj,passed_second_offending_obj,'second_offending_obj shouldve been passed when was called');
+	},
+	'validate returns a cancel fn to callbacks': function () {
+		var card_title_required_ran = false,
+		card_effort_required_didnt_run = true,
+		valid = o.ui.validate([
+			{
+				"key": "card[not_title]",
+				"value": "FFFFFFFUUUUUUUUUUUUU"
+			},
+			{
+				"key": "card[not_effort]",
+				"value": "4"
+			}
+		],
+		{
+			'card[title]': {
+				required: function () {
+					card_title_required_ran = true;
+					return false;
+				}
+			},
+			'card[effort]': {
+				required: function () {
+					card_effort_required_didnt_run = false;
+				}
+			}
+		});
+		Assert.isTrue(shouldve);
+		Assert.isTrue(shouldntve);
 	},
 	'works': function () {
 		var valid = o.ui.validate([
@@ -110,8 +139,7 @@ test({
 				"key": "card[body]",
 				"value": "WHICH?"
 			}
-		]
-		,{
+		],{
 			'card[title]': {
 				required: function () {
 				}
