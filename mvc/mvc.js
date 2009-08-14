@@ -63,12 +63,12 @@
 		// name: 'card',
 		// token: 'asdf',
 //	request: function () {
-//		var that = this, args = o.array(arguments), request, timer = window.setTimeout(function () {
+//		var that = this, args = o.array(arguments), request, timer = setTimeout(function () {
 //			request = o.remote.request.apply(that,args);
 //		},2000);
 //		return {
 //			abort: function () {
-//				timer && window.clearTimeout(timer);
+//				timer && clearTimeout(timer);
 //				request && request.abort;
 //			}
 //		};

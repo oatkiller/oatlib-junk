@@ -11,7 +11,7 @@
 	handler = (o.ui.auto_layout_handler = function (my_node) {
 		my_nodes = o.dom.is_node(my_node) ? [my_node] : nodes;
 		my_nodes[o.each](o.dom.hide);
-		window.setTimeout(function () {
+		setTimeout(function () {
 			my_nodes[o.each](function (node) {
 				if (node.parentNode) {
 					node.style.height = node.parentNode.offsetHeight + 'px';
