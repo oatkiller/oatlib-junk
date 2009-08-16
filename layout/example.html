@@ -35,57 +35,35 @@
 		</style>
 	</head>
 	<body>
-		<table>
+		<table style="background-color: red;">
 			<tbody>
 				<tr>
-					<td height="30" style="background-color: #000;">
-						b
+					<td height="60"></td>
+				</tr>
+				<tr>
+					<td style="background-color: green;">
+						<div id="column_holder" style="overflow: auto; background-color: pink;">
+							<table>
+								<tbody>
+									<tr>
+										<td class="droppable column"></td>
+										<td class="droppable column"></td>
+										<td class="droppable column"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</td>
 				</tr>
 				<tr>
-					<td style="background-color: red;">
-						<table>
-							<tbody>
-								<tr>
-									<td width="50" style="background-color: orange;"></td>
-									<td style="background-color: pink;">
-										<div style="overflow: auto;" id="column_holder">
-											<table>
-												<tbody>
-													<tr>
-														<td class="column droppable">
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-															<div class="card"></div>
-														</td>
-														<td class="column droppable"></td>
-														<td class="column droppable"></td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</td>
-									<td width="50" style="background-color: green;"></td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td height="100" style="background-color: blue;">
-						a
-					</td>
+					<td height="60"></td>
 				</tr>
 			</tbody>
 		</table>
-		<script src="/javascripts/oatlib-ui.debug.js"></script>
+		<script src="../oatlib-ui.debug.js"></script>
+		<script>
+			var o = window['http://oatlab.com/oatlib/v2'];
+			o.ui.auto_layout(o.dom.element('column_holder'));
+		</script>
 	</body>
 </html>
