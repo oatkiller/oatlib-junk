@@ -1,4 +1,4 @@
-//= require <oatlib-ui/mvc/mvc>
+//= require <oatlib-ui/view/view>
 test({
 	name: 'asdf',
 	'asdf': function () {
