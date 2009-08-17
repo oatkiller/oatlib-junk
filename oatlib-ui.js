@@ -1,1 +1,1 @@
-//= require <oatlib-ui/drop/example>
+//= require <oatlib-ui/buttons/example>
