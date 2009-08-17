@@ -1,9 +1,9 @@
-//= require <dom/absolutize>
 //= require <oatlib-ui/reference>
+//= require <dom/event/add_listener>
+//= require <cartesian/distance>
+//= require <dom/absolutize>
 //= require <dom/event/delegate>
 //= require <dom/event/prevent_select>
-//= require <empty_function>
-//= require <application_event>
 
 o.ui.drag = function (options) {
 
@@ -18,14 +18,59 @@ o.ui.drag = function (options) {
 	cancel_active_drag,
 	current_z_index = 1,
 
-	// main dragging routine
+	mousedown_x,
+	mousedown_y,
+	mousemove_watcher,
+	mouseup_watcher,
+	cancel_active_drag = false,
+
+	// watch for a mouse down
+	mousedown_watcher = o.dom.event.delegate({
+		type: 'mousedown',
+		test: is_draggable,
+		action: function (e,oe) {
+			if (cancel_active_drag) {
+				return false;
+			}
+
+			var	mousedown_coordinates = oe.get_mouse_coordinates(),
+			target = oe.delegate_target;
+
+			mousedown_x = mousedown_coordinates.x;
+			mousedown_y = mousedown_coordinates.y;
+
+			mousemove_watcher	= o.dom.event.add_listener(document,'mousemove',function (e,oe) {
+				if (e.which === undefined && e.button === 0) {
+					mousemove_watcher();
+					return;
+				}
+				var mousemove_coordinates = oe.get_mouse_coordinates();
+				var distance = o.cartesian.distance(mousedown_x,mousedown_y,mousemove_coordinates.x,mousemove_coordinates.y);
+				if (distance > 3) {
+					mousemove_watcher();
+					begin_dragging({
+						mousedown_coordinates: mousedown_coordinates,
+						mousemove_coordinates: mousemove_coordinates,
+						e: e,
+						oe: oe,
+						target_node: target
+					});
+				}
+			});
+
+			mouseup_watcher = o.dom.event.add_listener(document,'mouseup',function (e,oe) {
+				mousemove_watcher();
+				document.title = 'not watching mouse movements';
+			});
+		}
+	}),
+
 	begin_dragging = function (data) {
 
 		var target_node = data.target_node,
 		starting_point_x = 0,
 		starting_point_y = 0,
-		original_mouse_coordinates = data.oe.get_mouse_coordinates(),
-		current_mouse_coordinates = original_mouse_coordinates,
+		current_mouse_coordinates = data.mousemove_coordinates,
 		mouse_coordinate_watcher,
 		update_target_position,
 		cancel_mouseup,
@@ -76,8 +121,8 @@ o.ui.drag = function (options) {
 				if (new_mouse_coordinates.x !== current_mouse_coordinates.x || new_mouse_coordinates.y !== current_mouse_coordinates.y) {
 					current_mouse_coordinates = new_mouse_coordinates;
 
-					target_node.style.left = (starting_point_x + (current_mouse_coordinates.x - original_mouse_coordinates.x)) + 'px';
-					target_node.style.top = (starting_point_y + (current_mouse_coordinates.y - original_mouse_coordinates.y)) + 'px';
+					target_node.style.left = (starting_point_x + (current_mouse_coordinates.x - mousedown_x)) + 'px';
+					target_node.style.top = (starting_point_y + (current_mouse_coordinates.y - mousedown_y)) + 'px';
 
 					event.fire({
 						type: 'on_updated_position',
@@ -105,25 +150,9 @@ o.ui.drag = function (options) {
 
 	};
 
-	// prevent draggable things from being selected
+	// prevent select..
 	o.dom.event.prevent_select(is_draggable);
 
-	// watch for the mousedown to begin it all
-	var cancel_delegate = o.dom.event.delegate({
-		ancestor: document.body,
-		type: 'mousedown',
-		test: is_draggable,
-		action: function (e,oe) {
-			if (!cancel_active_drag) {
-				begin_dragging({
-					e: e,
-					oe: oe,
-					target_node: oe.delegate_target
-				});
-			}
-		}
-	});
-
-	return cancel_delegate;
+	return mousedown_watcher;
 
 };

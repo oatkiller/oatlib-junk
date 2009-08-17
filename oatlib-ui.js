@@ -1,1 +1,1 @@
-//= require <oatlib-ui/mvc/units>
+//= require <oatlib-ui/drop/example>

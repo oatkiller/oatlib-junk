@@ -1,6 +1,7 @@
 //= require <oatlib-ui/reference>
 //= require <oatlib-ui/drag/drag>
 //= require <oatlib-ui/drop/drop>
+//= require <application_event>
 //= require <dom/has_class_name>
 
 o.ui.drop_helper = function () {

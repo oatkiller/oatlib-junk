@@ -1,6 +1,7 @@
 //= require <oatlib-ui/reference>
 //= require <oatlib-ui/drag/drag>
 //= require <application_event>
+//= require <dom/has_class_name>
 
 
 
