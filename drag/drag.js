@@ -60,7 +60,6 @@ o.ui.drag = function (options) {
 
 			mouseup_watcher = o.dom.event.add_listener(document,'mouseup',function (e,oe) {
 				mousemove_watcher();
-				document.title = 'not watching mouse movements';
 			});
 		}
 	}),
