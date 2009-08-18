@@ -5,12 +5,11 @@
 	</head>
 	<body>
 		<div style="padding: 10px; width: 900px; margin: 20px auto; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; min-height: 500px;">
-			<span class="oatlib-button oatlib-button-avail-for-clicking">create</span>
-			<span class="oatlib-button oatlib-button-avail-for-clicking-prioritized">create</span>
-			<span class="oatlib-button oatlib-button-disabled">create</span>
-			<span class="oatlib-button oatlib-button-being-clicked">create</span>
-			<span class="oatlib-button oatlib-button-busy">create</span>
-			<span class="oatlib-button oatlib-button-finished">create</span>
+			<button class="oatlib-button">create</button>
+			<button class="oatlib-button oatlib-button-priority">create</button>
+			<button class="oatlib-button oatlib-button-busy">create</button>
+			<button class="oatlib-button oatlib-button-disabled">create</button>
+			<button class="oatlib-button oatlib-button-success">create</button>
 		</div>
 		<style>
 			body {
@@ -18,115 +17,79 @@
 			}
 			.oatlib-button {
 				display: inline-block;
+
 				-moz-border-radius: 3px;
 				-webkit-border-radius: 3px;
 				border-radius: 3px;
-				padding: 10px;
+
+				padding: 9px;
 
 				background-color: rgb(0,148,153);
-				background-color: rgba(0,247,255,.2);
+				background-color: rgba(77,219,179,.6);
+
 				font-family: 'OCR A STD',monospace;
 				font-size: 16px;
+
 				margin: 0 0 5px 0;
+
 				cursor: pointer;
 
 				color: #fff;
-
-				font-weight: normal !important;
-				font-weight: bold;
+				border: 1px solid #fff;
 
 				background-image: url('button_tile.png');
+				background-position: -1px -1px;
 
-				-webkit-transition-property: background-color;
-				-webkit-transition-duration: 250ms;
-				-webkit-transition-timing-function: ease-in;
+
+				-webkit-transition-property: background-position;
+				-webkit-transition-duration: 205ms;
+				-webkit-transition-timing-function: linear;
 				-webkit-transition-delay: initial;
 
+
+				/*background: -webkit-gradient(linear, 50% 0%, 0, 50% 100%, 30, from(#fff), to(#000)) content-box padding-box;*/
+
+
 			}
 
-			.oatlib-button-avail-for-clicking:hover {
-				border: 2px solid #fff;
-				background-position: -2px -2px;
-				background-color: rgb(0,247,255);
-				background-color: rgba(0,247,255,.3);
+			.oatlib-button:hover {
+				border-width: 2px;
 				padding: 8px;
-
+				background-position: -200px -2px;
+				-webkit-transition-duration: 20025ms;
+				background-color: rgba(63,255,146,.5);
+				/*background: rgba(0,247,255,.2) -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0)), to(rgba(255,255,255,.5)));*/
 			}
 
-			.oatlib-button-avail-for-clicking-prioritized,
-			.oatlib-button-avail-for-clicking-prioritized:hover {
-				padding: 9px;
-				background-color: rgb(0,111,255);
-				background-color: rgba(0,111,255,.3);
-				border: 1px solid rgb(0,111,255);
-				border: 1px solid rgba(0,111,255,.5);
-				background-position: -1px -1px;
+			.oatlib-button:active {
+				border-width: 3px;
+				padding: 7px;
+				background-position: -3px -3px;
 			}
-			
-			.oatlib-button-avail-for-clicking-prioritized:hover {
-				background-color: rgb(0,111,255);
-				background-color: rgba(0,111,255,.4);
-				border: 2px solid rgb(0,111,255);
-				border: 2px solid rgba(0,111,255,.6);
-				background-position: -2px -2px;
-				padding: 8px;
+
+			.oatlib-button-priority {
+				background-color: rgba(0,51,255,.2);
+			}
+
+			.oatlib-button-priority:hover {
+				background-color: rgba(0,51,255,.4);
 			}
 
 			.oatlib-button-disabled {
-				background-color: rgb(143,189,190);
 				background-color: rgba(143,189,190,.4);
 				color: #ddd;
 				cursor: not-allowed;
 			}
 
-			.oatlib-button-disabled:hover {
-				background-color: rgb(143,189,190);
-				background-color: rgba(143,189,190,.5);
-				color: #ccc;
-				border: 3px solid #ccc;
-				background-position: -3px -3px;
-				padding: 7px;
-				cursor: not-allowed;
-			}
-
-			.oatlib-button-being-clicked {
-				border: 3px solid #fff;
-				background-position: -3px -3px;
-				background-color: rgb(0,247,255);
-				background-color: rgba(0,247,255,.4);
-				padding: 7px;
-			}
-
-			.oatlib-button-busy,
-			.oatlib-button-busy:hover {
-				background-color: rgb(249,255,70);
+			.oatlib-button-busy {
 				background-color: rgba(249,255,70,.4);
 			}
 
-			.oatlib-button-busy:hover {
-				padding: 9px;
-				border: 1px solid rgb(249,255,70);
-				border: 1px solid rgba(249,255,70,.6);
-				background-position: -1px -1px;
-			}
-
-			.oatlib-button-finished,
-			.oatlib-button-finished:hover {
-				background-color: rgb(0,247,255);
+			.oatlib-button-success {
 				background-color: rgba(0,247,255,.5);
-				border: 2px solid rgb(0,255,204);
-				border: 2px solid rgba(0,255,204,.6);
-				background-position: -2px -2px;
-				padding: 8px;
-			}
-
-			.oatlib-button-finished:hover {
-				border: 3px solid rgb(0,255,204);
-				border: 3px solid rgba(0,255,204,.6);
-				background-position: -3px -3px;
-				padding: 7px;
 			}
 
 		</style>
+		<script src="../../dist/oatlib.debug.js"></script>
 	</body>
 </html>
