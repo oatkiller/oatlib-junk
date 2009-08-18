@@ -1,1 +1,1 @@
-//= require <oatlib-ui/buttons/example>
+//= require <oatlib-ui/canvas/bar_graph>
