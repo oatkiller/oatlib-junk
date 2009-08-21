@@ -5,6 +5,7 @@
 //= require <remote/query_string_from_obj>
 //= require <json/parse>
 //= require <map>
+//= require <combine>
 
 o.ui.resource = o.builder({
 	// implementer needs to provide these
@@ -26,9 +27,26 @@ o.ui.resource = o.builder({
 //		};
 //	},
 	request: function (params) {
-		return o.remote.request(o.combine({
-			on_failure: this.on_failure[o.bind](this)
-		},params));
+		this.on_start && this.on_start.apply(this,arguments);
+
+		o.soft_combine(params,{
+			on_failure: this.default_on_failure
+		});
+
+		var that = this;
+
+		if (this.on_complete || this.on_failure || this.on_success) {
+			var old_params = o.combine({},params);
+			['on_complete','on_failure','on_success'][o.each](function (on) {
+				that[on] && (params[on] = function () {
+					that[on].apply(this,arguments);
+					return old_params[on].apply(this,arguments);
+				});
+			}[o.bind](this));
+		}
+
+		return o.remote.request(params);
+
 	},
 	get_url_for_id: function (id) {
 		return this.url + '/{id}.json'[o.supplant]({id: id});
@@ -72,8 +90,7 @@ o.ui.resource = o.builder({
 		return this.request({
 			url: this.get_url_for_id(id),
 			method: 'delete',
-			body: this.get_token_query_string(),
-			on_complete: callback
+			body: this.get_token_query_string()
 		});
 	},
 	create: function (array_of_params,callbacks) {
@@ -84,8 +101,7 @@ o.ui.resource = o.builder({
 			body: this.add_token_query_string(o.remote.query_string_from_obj(array_of_params)),
 			on_success: callbacks && callbacks.on_success && function (r) {
 				callbacks.on_success(o.json.parse(r.responseText)[that.name]);
-			},
-			on_complete: callbacks.on_complete
+			}
 		});
 	},
 	update: function (id,array_of_params,callback) {
