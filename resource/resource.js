@@ -25,7 +25,11 @@ o.ui.resource = o.builder({
 //			}
 //		};
 //	},
-	request: o.remote.request,
+	request: function (params) {
+		return o.remote.request(o.combine({
+			on_failure: this.on_failure[o.bind](this)
+		},params));
+	},
 	get_url_for_id: function (id) {
 		return this.url + '/{id}.json'[o.supplant]({id: id});
 	},
@@ -52,9 +56,6 @@ o.ui.resource = o.builder({
 				callback && callback(o.json.parse(r.responseText)[o.map](function (obj) {
 					return obj[that.name];
 				}));
-			},
-			on_failure: function (r) {
-				callback && callback(r);
 			}
 		});
 	},
@@ -64,9 +65,6 @@ o.ui.resource = o.builder({
 			url: this.get_url_for_id(id),
 			on_success: function (r) {
 				callback && callback(that.get_object_from_response(r));
-			},
-			on_failure: function (r) {
-				callback && callback(r);
 			}
 		});
 	},
@@ -87,8 +85,7 @@ o.ui.resource = o.builder({
 			on_success: callbacks && callbacks.on_success && function (r) {
 				callbacks.on_success(o.json.parse(r.responseText)[that.name]);
 			},
-			on_complete: callbacks.on_complete,
-			on_failure: callbacks.on_failure
+			on_complete: callbacks.on_complete
 		});
 	},
 	update: function (id,array_of_params,callback) {
