@@ -1,9 +1,9 @@
-//= require <oatlib-ui/canvas/get_context_helper>
+//= require <oatlib-ui/canvas/get_context>
 with (o.ui.canvas) {
 	var percent = .8,
 	width = 100,
 	height = 500,
-	ctx = o.ui.canvas.get_context_helper(width,height);
+	ctx = o.ui.canvas.get_context(width,height);
 	var snr = function (fn) {
 		return function () {
 			ctx.save();
