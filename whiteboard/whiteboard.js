@@ -16,6 +16,13 @@ o.ui.whiteboard = function () {
 	cache_canvas = cache_ctx.canvas,
 	strokes = [],
 	current_stroke,
+	current_tool,
+	foreground_style,
+	background_style,
+	tools = {
+		brush: {
+	 	}
+	},
 	point_from_mouse_coordinates = function (mouse_coordinate) {
 		mouse_coordinate.x -= buffer_canvas_position.x;
 		mouse_coordinate.y -= buffer_canvas_position.y;
