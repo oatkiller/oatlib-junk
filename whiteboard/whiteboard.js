@@ -126,13 +126,20 @@ o.ui.whiteboard = function () {
 		width: 'width_input',
 		stroke: 'stroke_input',
 		fill: 'fill_input',
-		close: 'close_input'
+		close: 'close_input',
+		erase: 'erase_input'
 	},o.dom.element),
 	update_stroke_settings = function () {
 		stroke_settings.lineWidth = parseFloat(inputs.width.value);
 		stroke_settings.strokeStyle = inputs.stroke.value;
 		stroke_settings.fillStyle = inputs.fill.value;
 		stroke_settings.close = inputs.close.checked;
+
+		// erase
+		if (inputs.erase.checked) {
+			stroke_settings.close = false;
+			stroke_settings.strokeStyle = '#ffffff';
+		}
 	},
 	clear_button = o.dom.element('clear');
 
