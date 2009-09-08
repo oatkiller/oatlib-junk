@@ -2,7 +2,7 @@
 //= require <oatlib-ui/canvas/get_context>
 //= require <dom/element>
 //= require <dom/event/add_listener>
-//= require <dom/remove>
+//= require <dom/hide>
 //= require <dom/find_position>
 //= require <map>
 //= require <last>
@@ -24,13 +24,6 @@ o.ui.whiteboard = function () {
 		presentation_context: get_context(),
 		paths: [],
 		update: function () {
-			if (this.previous_paths_length !== undefined) {
-				if (this.previous_paths_length === this.paths.length - 1) {
-					console.log('drawing the latest path');
-					this.paths[o.last]().draw();
-				}
-			}
-			this.previous_paths_length = this.paths.length;
 			clear_ctx(this.presentation_context);
 			this.presentation_context.drawImage(this.path_context.canvas,0,0);
 			this.presentation_context.drawImage(this.tool_context.canvas,0,0);
@@ -65,7 +58,7 @@ o.ui.whiteboard = function () {
 			ctx.restore();
 		},
 		save: function () {
-			board.paths.push(this);
+			board.path_context.drawImage(board.tool_context.canvas,0,0);
 			delete tool.edit_path;
 		}
 	}),
@@ -105,7 +98,7 @@ o.ui.whiteboard = function () {
 			board.update();
 		},
 		draw_shadow: function () {
-			console.log('drawing the shadow');
+			//console.log('drawing the shadow');
 			var ctx = board.tool_context;
 			ctx.save();
 			ctx.strokeStyle = 'rgba(0,0,0,.5)';
@@ -130,10 +123,9 @@ o.ui.whiteboard = function () {
 		this.draw();
 	}[o.bind](tool));
 
-/*
+
 	['tool','path'][o.each](function (a) {
-		o.dom.remove(board[a+'_context'].canvas);
+		o.dom.hide(board[a+'_context'].canvas);
 	});
-	*/
 
 };
