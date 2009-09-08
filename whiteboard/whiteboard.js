@@ -6,148 +6,118 @@
 //= require <dom/find_position>
 //= require <map>
 
-o.ui.whiteboard = function () {
-	var width = 600,
-	height = 600,
-	buffer_ctx = o.ui.canvas.get_context(width,height),
-	buffer_canvas = buffer_ctx.canvas,
-	buffer_canvas_position = o.dom.find_position(buffer_canvas),
-	cache_ctx = o.ui.canvas.get_context(width,height),
-	cache_canvas = cache_ctx.canvas,
-	strokes = [],
-	current_stroke,
-	current_tool,
-	foreground_style,
-	background_style,
-	tools = {
-		brush: {
-	 	}
-	},
-	point_from_mouse_coordinates = function (mouse_coordinate) {
-		mouse_coordinate.x -= buffer_canvas_position.x;
-		mouse_coordinate.y -= buffer_canvas_position.y;
-		return mouse_coordinate;
-	},
-	clear_board = function () {
-		erase_board();
-		erase_board(cache_ctx);
-		strokes.length = 0;
-	},
-	erase_board = function (ctx) {
-		ctx = ctx || buffer_ctx;
-		canvas = ctx.canvas;
+o.ui.whiteboard = function (width,height) {
+
+	var get_context = o.ui.canvas.get_context[o.curry](width,height),
+	clear_ctx = function (ctx) {
+		var canvas = ctx.canvas;
 		ctx.clearRect(0,0,canvas.width,canvas.height);
+		return ctx;
 	},
-	draw_cache = function () {
-		buffer_ctx.drawImage(cache_canvas,0,0);
-	},
-	update_board = function () {
-		erase_board();
-		draw_cache();
-		current_stroke.draw();
-	},
-	stroke_settings = {
-		lineWidth: 20,
-		lineCap: 'round',
-		lineJoin: 'round'
-	},
-	stroke = function () {
-		return o.combine({},stroke_settings,{
-			points: [],
-			add_point: function (point) {
-				this.points.push(point);
-				update_board();
-			},
-			draw: function (ctx) {
-				if (this.points.length < 2) {return;}
-				ctx = ctx || buffer_ctx;
-				ctx.save();
-
-				// set options
-				['fillStyle','strokeStyle','lineWidth','lineCap','lineJoin','miterLimit'][o.each](function (property) {
-					this[property] !== undefined && (ctx[property] = this[property]);
-				}[o.bind](this));
-
-				var my_path = ctx.beginPath(),
-				my_points = this.points.slice(0),
-				first_point = my_points.shift();
-				ctx.moveTo(first_point.x,first_point.y);
-				while (my_points.length) {
-					var my_next_point = my_points.shift();
-					ctx.lineTo(my_next_point.x,my_next_point.y);
+	board = {
+		paths: [],
+		path_context: get_context(),
+		tool_context: get_context(),
+		presentation_context: get_context(),
+		update: function () {
+			if (this.previous_paths_length !== undefined) {
+				if (this.previous_paths_length > this.paths.length) {
+					this.paths.draw();
+				} else if (this.previous_paths_length < this.paths.length) {
+					clear_ctx(this.path_context);
+					this.paths[o.each](function (path) {
+						path.draw();
+					});
 				}
-
-				// if this path is closed, do that
-				if (this.close) {
-					ctx.closePath();
-					ctx.fill();
-				}
-				
-				ctx.stroke();
-				ctx.restore();
 			}
-		});
-	},
-	stroking = false,
-	begin_stroke = function (point) {
-		update_stroke_settings(); // cheap way of always having the up to date stroke settings
-		stroking = true;
-		current_stroke = stroke();
-		current_stroke.add_point(point);
-	},
-	end_stroke = function () {
-		stroking = false;
-		strokes.push(current_stroke);
-		current_stroke.draw(cache_ctx);
-	},
-	add_point = function (point) {
-		current_stroke.add_point(point);
-	};
-
-	o.dom.remove(cache_canvas);
-
-	o.dom.event.add_listener(buffer_canvas,'mousedown',function (e,oe) {
-		begin_stroke(point_from_mouse_coordinates(oe.get_mouse_coordinates()));
-	});
-
-	o.dom.event.add_listener(document,'mouseup',function () {
-		end_stroke();
-	}[o.only_if](function () {
-		return stroking;
-	}));
-
-	o.dom.event.add_listener(buffer_canvas,'mousemove',function (e,oe) {
-		add_point(point_from_mouse_coordinates(oe.get_mouse_coordinates()));
-	}[o.only_if](function () {
-		return stroking;
-	}));
-
-	var inputs = o.map({
-		width: 'width_input',
-		stroke: 'stroke_input',
-		fill: 'fill_input',
-		close: 'close_input',
-		erase: 'erase_input'
-	},o.dom.element),
-	update_stroke_settings = function () {
-		stroke_settings.lineWidth = parseFloat(inputs.width.value);
-		stroke_settings.strokeStyle = inputs.stroke.value;
-		stroke_settings.fillStyle = inputs.fill.value;
-		stroke_settings.close = inputs.close.checked;
-
-		// erase
-		if (inputs.erase.checked) {
-			stroke_settings.close = false;
-			stroke_settings.strokeStyle = '#ffffff';
+			clear_ctx(presentation_context);
+			presentation_context.drawImage(this.path_context.canvas,0,0);
+			presentation_context.drawImage(this.tool_context.canvas,0,0);
 		}
 	},
-	clear_button = o.dom.element('clear');
+	path_builder = o.builder({
+		add_point: function (point) {
+			(this.points || (this.points = [])).push(point);
+		},
+		draw: function (ctx) {
+			if (this.points === undefined) {return false;}
+			ctx = ctx || board.path_context;
+			ctx.save();
 
-	o.dom.event.add_listener(clear_button,'click',function () {
-		clear_board();
-	});
+			ctx.lineWidth = this.settings.line_width;
+			ctx.strokeStyle = this.settings.stroke_style;
 
+			ctx.beginPath();
+			var points = this.points.slice(0),
+			point = points.shift();
+			ctx.moveTo(point.x,point.y);
+			while (points.length) {
+				point = points.shift();
+				ctx.lineTo(point.x,point.y);
+			}
+			ctx.stroke();
+			ctx.restore();
+		},
+		save: function () {
+			board.paths.push(this);
+			delete tool.edit_path;
+		}
+	}),
+	tool = {
+		get_path: function (settings) {
+			return this.edit_path || (this.edit_path = path_builder({
+				settings: o.combine({},this.settings),
+				points: [
+					{
+						x: this.x,
+						y: this.y
+					}
+				]
+			}));
+		},
+		settings: {
+			line_width: 10,
+			stroke_style: '#000000'
+		},
+		set_point_from_mouse_coordinates: function (coordinates) {
+			var position = o.dom.find_position(board.presentation_context.canvas);
+			this.x = coordinates.x - position.x;
+			this.y = coordinates.y - position.y;
+		},
+		draw: function () {
+			clear_ctx(board.tool_context);
+			if (this.edit_path) {
+				this.edit_path.draw(board.tool_context);
+			} else {
+				this.draw_shadow();
+			}
+			board.update();
+		},
+		draw_shadow: function () {
+			var ctx = board.tool_context;
+			ctx.save();
+			ctx.fillStyle = 'rgba(0,0,0,.5)';
+			ctx.beginPath();
+			ctx.arc(this.x,this.y,this.settings.line_width,0,Math.PI*2,true);
+			ctx.stroke();
+			ctx.restore();
+		},
+		end_path: function () {
+		}
+	};
 
-	
+	o.dom.event.add_listener(board.presentation_context.canvas,'mousemove',function (e,oe) {
+		this.set_point_from_mouse_coordinates(oe.get_mouse_coordinates());
+		this.draw();
+	}[o.bind](tool));
+	o.dom.event.add_listener(board.presentation_context.canvas,'mousedown',function (e,oe) {
+		this.set_point_from_mouse_coordinates(oe.get_mouse_coordinates());
+		this.get_path();
+		this.draw();
+	})[o.bind](tool);
+	o.dom.event.add_listener(document,'mouseup',function (e,oe) {
+		this.edit_path && this.edit_path.save();
+		this.draw();
+	}[o.bind](tool));
 
 };
