@@ -45,7 +45,7 @@ o.ui.drag = function (options) {
 					return;
 				}
 				var mousemove_coordinates = oe.get_mouse_coordinates();
-				var distance = o.cartesian.distance(mousedown_x,mousedown_y,mousemove_coordinates.x,mousemove_coordinates.y);
+				var distance = o.cartesian.distance({x: mousedown_x, y: mousedown_y},mousemove_coordinates);
 				if (distance > 3) {
 					mousemove_watcher();
 					begin_dragging({
