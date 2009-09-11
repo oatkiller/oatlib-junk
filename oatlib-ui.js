@@ -1,1 +1,1 @@
-//= require <oatlib-ui/whiteboard/whiteboard_example>
+//= require <oatlib-ui/drag/drag_example>
