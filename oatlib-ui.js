@@ -1,1 +1,1 @@
-//= require <oatlib-ui/drag/drag_example>
+//= require <oatlib-ui/chat/chat>

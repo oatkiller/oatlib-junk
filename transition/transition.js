@@ -2,9 +2,9 @@
 //= require <dom/set_interval>
 //= require <dom/clear_interval>
 //= require <each>
+//= require <invoke>
+//= require <update>
 //= require <filter>
-//= require <call>
-//= require <splice>
 //= require <oatlib-ui/transitions/sine_ease_in_out>
 
 (function () {
@@ -28,7 +28,8 @@
 		// run 'stop_interval_if_needed'
 		// reset 'things_to_tick' to the result of a filter of 'things_to_tick'
 		// the filter should run call
-		Array.prototype.splice.apply(things_to_tick,[0,things_to_tick.length].concat(things_to_tick[o.filter](o.call)));
+		things_to_tick[o.update](things_to_tick[o.filter](o.invoke));
+		//Array.prototype.splice.apply(things_to_tick,[0,things_to_tick.length].concat(things_to_tick[o.filter](o.call)));
 		stop_interval_if_needed();
 	},
 	start_interval = function () {
