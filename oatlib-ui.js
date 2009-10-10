@@ -1,1 +1,1 @@
-//= require <oatlib-ui/chat/chat>
+//= require <oatlib-ui/turtle/turtle>
