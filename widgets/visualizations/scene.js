@@ -1,5 +1,5 @@
 //= require <oatlib-ui/canvas/get_context>
-//= require <class>
+//= require <klass>
 //= require <bind>
 //= require <map>
 //= require <each>
@@ -13,7 +13,7 @@ var Scene = function (size) {
 	this.size = size;
 	this.ctx = o.ui.canvas.get_context(size.x,size.y);
 	this.ctx.strokeStyle = 'rgba(255,0,0,.2)';
-}[o.class]({
+}[o.klass]({
 	get2DPoint: function (a) {
 		var c = this.camera.position, O = this.camera.rotation, e = this.camera.viewer;
 		// c: the location of the camera.

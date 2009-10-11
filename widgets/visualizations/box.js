@@ -1,11 +1,11 @@
 //= require <combine>
-//= require <class>
+//= require <klass>
 //= require <map>
 //= require <mask>
 
 var Box = function (position,rotation,size) {
 	o.combine(this,{position: position,rotation: rotation,size: size});
-}[o.class]({
+}[o.klass]({
 	getPoint: function (i) {
 		var point = o.mask(this.position);
 		switch (i) {
