@@ -1,6 +1,8 @@
 //= require <combine>
+//= require <range>
 //= require <class>
 //= require <map>
+//= require <mask>
 //= require <each>
 //= require <oatlib-ui/canvas/get_context>
 
@@ -13,19 +15,40 @@
 	var v = function (x,y,z) {
 		return new V(x,y,z);
 	};
- /*
-	var Box = function (position,rotation,scale) {
-		o.combine(this,{position: position,rotation: rotation,scale: scale});
+	var Box = function (position,rotation,size) {
+		o.combine(this,{position: position,rotation: rotation,size: size});
 		console.log('created box: ',this);
 	}[o.class]({
 		getPoint: function (i) {
-			return v(
-
-			);
-		}
+			var point = o.mask(this.position);
+			switch (i) {
+				case 0: break;
+				case 1: this.accomodateForZ(point); break;
+				case 2: this.accomodateForZ(point); this.accomodateForY(point); break;
+				case 3: this.accomodateForY(point); break;
+				case 4: this.accomodateForX(point); break;
+				case 5: this.accomodateForZ(point); this.accomodateForX(point); break;
+				case 6: this.accomodateForZ(point); this.accomodateForX(point); this.accomodateForY(point); break;
+				case 7: this.accomodateForX(point); this.accomodateForY(point); break;
+			}
+			return point;
+		},
+		accomodateForX: function (point) {
+			point.x += this.size.x;
+			return point;
+		},
+		accomodateForY: function (point) {
+			point.y -= this.size.y;
+			return point;
+		},
+		accomodateForZ: function (point) {
+			point.z += this.size.z;
+			return point;
+		},
 	});
-	new Box(v(0,0,0),v(0,0,0),v(0,0,0));
-	*/
+	var my_box = new Box(v(0,1,0),v(0,0,0),v(1,1,1));
+
+	/*
 	var my_box = [
 		v(0,1,0),
 		v(0,1,1),
@@ -39,6 +62,7 @@
 	my_box.getPoint = function (i) {
 		return this[i];
 	};
+	*/
 
 	var get_2d_point = function (a,c,O,e) {
 		// c: the location of the camera.
@@ -73,6 +97,16 @@
 		[2,3,7,6]
 	];
 
+	var my_2d_points = o.range(0,7)[o.map](function (i) {
+		console.log('point ',i,': ',my_box.getPoint(i));
+		return scale(get_2d_point(
+			my_box.getPoint(i),
+			v(2.5,3.5,5),
+			v(0,0,0),
+			v(0,0,1)
+		));
+	});
+	/*
 	var my_2d_points = my_box[o.map](function (point) {
 		return scale(get_2d_point(
 			point,
@@ -81,6 +115,7 @@
 			v(0,0,1)
 		));
 	});
+	*/
 
 
 	ctx.strokeStyle = 'rgba(255,0,0,.2)';
@@ -91,7 +126,6 @@
 		c = my_2d_points[side[2]],
 		d = my_2d_points[side[3]];
 
-		console.log(a,b,c,d);
 		ctx.beginPath();
 		ctx.moveTo(a.x,a.y);
 		ctx.lineTo(b.x,b.y);
