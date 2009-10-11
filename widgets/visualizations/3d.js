@@ -16,6 +16,7 @@
 	render();
 
 	var moving = {
+		angle: 0,
 		forward: false,
 		left: false,
 		back: false,
@@ -75,14 +76,18 @@
 
 	// these are wrong cause the whole orientation is wrong
 	setTimeout(function () {
+		document.title = moving.angle;
 		if (moving.turn_left) {
-			my_scene.camera.rotation.y -= speed;
+			moving.angle -= Math.PI / 50;
+			my_scene.camera.rotation.y = moving.angle;
 		}
 		if (moving.turn_right) {
-			my_scene.camera.rotation.y += speed;
+			moving.angle += Math.PI / 50;
+			my_scene.camera.rotation.y = moving.angle;
 		}
 		if (moving.forward) {
-			my_scene.camera.position.z -= speed;
+			my_scene.camera.position.z -= speed * Math.cos(moving.angle);
+			my_scene.camera.position.x -= speed * Math.sin(moving.angle);
 		}
 		if (moving.back) {
 			my_scene.camera.position.z += speed;
