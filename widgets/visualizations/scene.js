@@ -4,12 +4,13 @@
 //= require <map>
 //= require <each>
 //= require <range>
+//= require <oatlib-ui/widgets/visualizations/camera>
 var Scene = function (size) {
-	this.camera = {
+	this.camera = new Camera({
 		position: v(.5,.5,5),
 		rotation: v(0,0,0),
-		viewer: v(1,0,1)
-	};
+		viewer: v(0,0,1)
+	});
 	this.size = size;
 	this.ctx = o.ui.canvas.get_context(size.x,size.y);
 	this.ctx.strokeStyle = 'rgba(255,0,0,.2)';

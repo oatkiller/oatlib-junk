@@ -9,19 +9,17 @@
 
 	var my_box = new Box(v(0,1,0),v(0,0,0),v(1,1,1));
 	var my_scene = new Scene(v(600,600));
+	var my_other_scene = new Scene(v(600,600));
 	var render = function () {
 		my_scene.ctx.clearRect(0,0,my_scene.ctx.canvas.width,my_scene.ctx.canvas.height);
 		my_scene.renderABox(my_box);
+
+		my_other_scene.ctx.clearRect(0,0,my_other_scene.ctx.canvas.width,my_other_scene.ctx.canvas.height);
+		my_other_scene.renderABox(my_box);
 	};
 	render();
 
-	var moving = {
-		angle: 0,
-		forward: false,
-		left: false,
-		back: false,
-		right: false
-	};
+	var moving = {};
 
 	o.dom.event.add_listener(document,'keydown',function (e,oe) {
 		var key = oe.get_key().key;
@@ -72,31 +70,25 @@
 		}
 	});
 
-	var speed = .03;
-
 	// these are wrong cause the whole orientation is wrong
 	setTimeout(function () {
-		document.title = moving.angle;
 		if (moving.turn_left) {
-			moving.angle -= Math.PI / 50;
-			my_scene.camera.rotation.y = moving.angle;
+			my_scene.camera.turnLeft();
 		}
 		if (moving.turn_right) {
-			moving.angle += Math.PI / 50;
-			my_scene.camera.rotation.y = moving.angle;
+			my_scene.camera.turnRight();
 		}
 		if (moving.forward) {
-			my_scene.camera.position.z -= speed * Math.cos(moving.angle);
-			my_scene.camera.position.x -= speed * Math.sin(moving.angle);
+			my_scene.camera.moveForward();
 		}
 		if (moving.back) {
-			my_scene.camera.position.z += speed;
+			my_scene.camera.moveBack();
 		}
 		if (moving.left) {
-			my_scene.camera.position.x += speed;
+			my_scene.camera.moveLeft();
 		}
 		if (moving.right) {
-			my_scene.camera.position.x -= speed;
+			my_scene.camera.moveRight();
 		}
 		setTimeout(arguments.callee,1E3 / 100);
 	},1E3 / 100);
