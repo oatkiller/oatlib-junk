@@ -11,7 +11,6 @@ var Camera = function (data) {
 	},
 	moveForward: function () {
 		this.position.z -= this.speed;
-		this.position.x -= this.speed * Math.sin(this.rotation.y);
 	},
 	moveLeft: function () {
 	},
